@@ -75,6 +75,15 @@
   .nights{margin-top:12px;background:var(--sage-soft);color:var(--sage);border-radius:12px;padding:10px 14px;font-weight:600;display:none}
   .rooms{display:grid;gap:8px;margin-top:4px}
   .room{display:flex;justify-content:space-between;align-items:center;border:1.5px solid var(--line);border-radius:12px;padding:11px 14px;cursor:pointer;background:#fff}
+  .modes{display:grid;grid-template-columns:1fr 1fr;gap:6px;background:#fff;border:1px solid var(--line);border-radius:16px;padding:5px;margin-bottom:16px}
+  .modes button{border:none;background:transparent;border-radius:12px;padding:10px 6px;font:inherit;font-weight:600;font-size:14.5px;color:var(--muted);cursor:pointer;line-height:1.3}
+  .modes button small{display:block;font-weight:400;font-size:11.5px}
+  .modes button.on{background:var(--ginger);color:#fff}
+  .qcat{display:flex;gap:8px;margin-bottom:8px}
+  .qcat button{flex:none;border:1.5px solid var(--line);background:#fff;border-radius:12px;width:46px;font:inherit;color:var(--muted);cursor:pointer}
+  .qhint{font-size:13px;color:var(--muted);background:#FFFCF8;border-radius:10px;padding:9px 12px;margin-bottom:4px}
+  body.quick .new-only{display:none}
+  body:not(.quick) .quick-only{display:none}
   .room.over{opacity:.6}
   .warn-s{color:var(--rose)!important;font-weight:600}
   .rule{font-size:12.5px;color:var(--muted);margin-top:10px;background:#FFFCF8;border-radius:10px;padding:8px 12px}
@@ -127,7 +136,26 @@
     <div class="note" id="reg-note">กรุณากรอกข้อมูลให้ครบ ทางโรงแรมจะติดต่อยืนยันการจอง</div>
     <div class="remember" id="remember">✓ เติมข้อมูลจากครั้งก่อนให้แล้ว (เก็บไว้ในเครื่องนี้เท่านั้น) <button type="button" onclick="forgetMe()">ล้างข้อมูล</button></div>
 
-    <section class="card">
+    <div class="modes" role="tablist">
+      <button type="button" data-mode="new" class="on">🐾 ลูกค้าใหม่<small>กรอกข้อมูลครั้งแรก</small></button>
+      <button type="button" data-mode="quick">⚡ ลูกค้าเก่า ฝากด่วน<small>กรอกแค่เบอร์ + ชื่อน้อง</small></button>
+    </div>
+
+    <section class="card quick-only">
+      <h2><span class="num">1</span>ลูกค้าเก่า ฝากด่วน</h2>
+      <div class="qhint">เคยฝากกับเราแล้ว? กรอกแค่ <b>เบอร์โทรที่เคยลงทะเบียน</b> และ <b>ชื่อน้อง</b> ข้อมูลการดูแลเดิมของน้องอยู่ในระบบโรงแรมแล้ว</div>
+      <label class="l" for="q-phone">เบอร์โทรที่เคยลงทะเบียน <span class="req">*</span></label>
+      <input type="tel" id="q-phone" inputmode="tel" autocomplete="tel" maxlength="15" placeholder="08x-xxx-xxxx">
+      <div class="err" id="e-q-phone">เบอร์โทร 9–10 หลัก</div>
+      <label class="l">ชื่อน้องแมวที่มาฝากครั้งนี้ <span class="req">*</span></label>
+      <div id="q-cats"></div>
+      <div class="err" id="e-q-cats">กรุณาใส่ชื่อน้องอย่างน้อย 1 ตัว</div>
+      <button type="button" class="add" id="q-add" style="padding:9px">＋ เพิ่มชื่อน้องอีกตัว</button>
+      <label class="l" for="q-change">มีอะไรเปลี่ยนจากครั้งก่อนไหม</label>
+      <textarea id="q-change" maxlength="1000" placeholder="เช่น เปลี่ยนอาหาร, มียาใหม่, ป่วยช่วงนี้ (ไม่มีเว้นว่างได้)"></textarea>
+    </section>
+
+    <section class="card new-only">
       <h2><span class="num">1</span>ข้อมูลเจ้าของ</h2>
       <label class="l" for="o-name">ชื่อ-นามสกุล <span class="req">*</span></label>
       <input type="text" id="o-name" autocomplete="name" maxlength="80" placeholder="เช่น สมใจ ใจดี">
@@ -147,14 +175,14 @@
       <input type="text" id="o-emer" maxlength="120" placeholder="ชื่อ / เบอร์โทร (ไม่บังคับ)">
     </section>
 
-    <section class="card">
+    <section class="card new-only">
       <h2><span class="num">2</span>ข้อมูลน้องแมว</h2>
       <div id="cats"></div>
       <button type="button" class="add" id="add-cat" onclick="addCat()">＋ เพิ่มน้องแมวอีกตัว</button>
     </section>
 
     <section class="card">
-      <h2><span class="num">3</span>วันเข้าพัก</h2>
+      <h2><span class="num" id="num-date">3</span>วันเข้าพัก</h2>
       <div class="row3">
         <div><label class="l" for="ci-date">วันที่มาฝาก <span class="req">*</span></label><input type="date" id="ci-date"></div>
         <div><label class="l" for="ci-time">เวลา</label><input type="time" id="ci-time"></div>
@@ -176,7 +204,7 @@
     </section>
 
     <section class="card">
-      <h2><span class="num">4</span>ความยินยอม</h2>
+      <h2><span class="num" id="num-consent">4</span>ความยินยอม</h2>
       <div class="terms" id="terms"></div>
       <label class="consent"><input type="checkbox" id="c-care"><span><b>ยินยอมให้โรงแรมดูแลน้องแมว</b> ตามข้อมูลข้างต้น <span style="color:var(--ginger)">*</span></span></label>
       <div class="err" id="e-care">กรุณาติ๊กยินยอมก่อนส่ง</div>
@@ -263,7 +291,27 @@ function units(a, ta, b, tb){
   if(h <= 0) return 0;
   const g = Number(CFG.grace_hours); return Math.max(1, Math.ceil((h - (isFinite(g) ? g : 4)) / 24 - 1e-9));
 }
-const catN = () => Math.max(1, cats.length);
+let mode = 'new';
+let qNames = [''];
+const catN = () => Math.max(1, mode === 'quick' ? qNames.filter(x => x.trim()).length : cats.length);
+function setMode(m){
+  mode = m === 'quick' ? 'quick' : 'new';
+  document.body.classList.toggle('quick', mode === 'quick');
+  document.querySelectorAll('.modes button').forEach(b => b.classList.toggle('on', b.dataset.mode === mode));
+  $('num-date').textContent = mode === 'quick' ? '2' : '3'; $('num-consent').textContent = mode === 'quick' ? '3' : '4';
+  if(mode === 'quick' && !$('q-phone').value) $('q-phone').value = $('o-phone').value;
+  try{ localStorage.setItem(MEM_KEY + '_mode', mode); }catch(e){}
+  updateSummary();
+}
+document.querySelector('.modes').addEventListener('click', e => { const b = e.target.closest('button'); if(b) setMode(b.dataset.mode); });
+function renderQ(){
+  $('q-cats').innerHTML = qNames.map((n, i) => `<div class="qcat"><input type="text" data-q="${i}" maxlength="60" value="${esc(n)}" placeholder="ชื่อน้อง${qNames.length > 1 ? 'ตัวที่ ' + (i + 1) : ''}">${qNames.length > 1 ? `<button type="button" data-qrm="${i}" aria-label="ลบ">✕</button>` : ''}</div>`).join('');
+  $('q-add').style.display = qNames.length >= 6 ? 'none' : '';
+}
+$('q-cats').addEventListener('input', e => { const i = e.target.dataset.q; if(i === undefined) return; qNames[i] = e.target.value; e.target.classList.remove('bad'); $('e-q-cats').classList.remove('on'); updateSummary(); });
+$('q-cats').addEventListener('click', e => { const i = e.target.dataset.qrm; if(i === undefined) return; qNames.splice(Number(i), 1); renderQ(); updateSummary(); });
+$('q-add').addEventListener('click', () => { qNames.push(''); renderQ(); const ins = $('q-cats').querySelectorAll('input'); ins[ins.length - 1].focus(); });
+$('q-phone').addEventListener('input', () => { $('q-phone').classList.remove('bad'); $('e-q-phone').classList.remove('on'); });
 const priceOf = (t, n) => n * (Number(t.price) + Number(t.extra_cat || 0) * Math.max(0, catN() - 1));
 
 // ---------- cats
@@ -397,7 +445,7 @@ $('rooms').addEventListener('click', e => {
 function updateSummary(){
   const a = $('ci-date').value, b = $('co-date').value, ta = $('ci-time').value, tb = $('co-time').value;
   const n = units(a, ta, b, tb);
-  const named = cats.filter(c => c.name.trim()).length || cats.length;
+  const named = mode === 'quick' ? qNames.filter(x => x.trim()).length : (cats.filter(c => c.name.trim()).length || cats.length);
   const box = $('nights');
   const t = (CFG.room_types || []).find(x => x.type === roomType);
   if(n > 0){
@@ -433,10 +481,16 @@ function mark(id, bad, errId){ $(id).classList.toggle('bad', bad); if(errId) $(e
 function validate(){
   let first = null;
   const hit = el => { if(!first) first = el; };
+  if(mode === 'quick'){
+    const qp = $('q-phone').value.replace(/\D/g, '');
+    if(mark('q-phone', qp.length < 9 || qp.length > 10, 'e-q-phone')) hit($('q-phone'));
+    if(!qNames.some(x => x.trim())){ $('e-q-cats').classList.add('on'); const el = $('q-cats').querySelector('input'); el.classList.add('bad'); hit(el); }
+  } else {
   if(mark('o-name', !$('o-name').value.trim(), 'e-o-name')) hit($('o-name'));
   const ph = $('o-phone').value.replace(/\D/g, '');
   if(mark('o-phone', ph.length < 9 || ph.length > 10, 'e-o-phone')) hit($('o-phone'));
-  cats.forEach(c => {
+  }
+  if(mode !== 'quick') cats.forEach(c => {
     const el = document.querySelector(`input[data-uid="${c.uid}"][data-f=name]`);
     const bad = !c.name.trim(); el.classList.toggle('bad', bad); $('e-cat-' + c.uid).classList.toggle('on', bad);
     if(bad) hit(el);
@@ -452,6 +506,9 @@ function validate(){
 }
 async function submitForm(){
   if(!validate()) return;
+  const bookingIn = {checkin_date:$('ci-date').value, checkin_time:$('ci-time').value, checkout_date:$('co-date').value, checkout_time:$('co-time').value,
+      room_type: roomType, note:$('b-note').value, consent_care:$('c-care').checked, consent_photo:$('c-photo').checked};
+  if(mode === 'quick') return submitQuick(bookingIn);
   const payload = {
     action:'register', website: $('website').value,
     owner:{name:$('o-name').value.trim(), phone:$('o-phone').value.trim(), line_id:$('o-line').value.trim(), emergency:$('o-emer').value.trim()},
@@ -474,20 +531,48 @@ async function submitForm(){
     $('loading').classList.remove('on'); $('submit').disabled = false;
   }
 }
+async function submitQuick(bookingIn){
+  const names = qNames.map(x => x.trim()).filter(Boolean);
+  const change = $('q-change').value.trim();
+  const payload = {action:'quickRegister', website:$('website').value, phone:$('q-phone').value.trim(), cat_names:names,
+    booking:Object.assign({}, bookingIn, {note:[change ? 'เปลี่ยนจากครั้งก่อน: ' + change : '', bookingIn.note].filter(Boolean).join('\n')})};
+  $('loading-text').textContent = 'กำลังส่งข้อมูล…';
+  $('loading').classList.add('on'); $('submit').disabled = true;
+  try{
+    const r = await call(payload);
+    if(r && r.error === 'not_member'){
+      // not found -> continue as a new customer, keep what they typed
+      $('o-phone').value = $('q-phone').value;
+      cats = names.map(n => newCat({name:n})); if(!cats.length) cats.push(newCat());
+      setMode('new'); renderCats();
+      $('o-name').focus(); window.scrollTo({top: 0, behavior:'smooth'});
+      toast('ไม่พบเบอร์นี้ในระบบ กรุณากรอกข้อมูลแบบลูกค้าใหม่ (ครั้งเดียว)'); return;
+    }
+    if(!r || !r.ok){ toast(ERR[r && r.error] || ('ส่งไม่สำเร็จ: ' + ((r && r.error) || ''))); return; }
+    try{ const m = JSON.parse(localStorage.getItem(MEM_KEY) || 'null') || {owner:{}, cats:[]}; m.owner.phone = payload.phone; m.qNames = names; localStorage.setItem(MEM_KEY, JSON.stringify(m)); }catch(e){}
+    showDone(r, {owner:{name:'ลูกค้าเก่า · ' + payload.phone}, booking:payload.booking, names, unknown:r.unknown || []});
+  }catch(err){
+    toast('เชื่อมต่อไม่ได้ กรุณาลองใหม่ (' + (err.message || err) + ')');
+  }finally{
+    $('loading').classList.remove('on'); $('submit').disabled = false;
+  }
+}
 function showDone(r, p){
   $('toast').classList.remove('on');
   $('form-view').style.display = 'none'; $('bar').style.display = 'none'; $('done-view').style.display = 'block';
   $('d-id').textContent = r.booking_id;
-  $('d-thumbs').innerHTML = cats.filter(c => c.photo).map(c => `<i style="background-image:url('${c.photo.data}')"></i>`).join('');
+  $('d-thumbs').innerHTML = p.names ? '' : cats.filter(c => c.photo).map(c => `<i style="background-image:url('${c.photo.data}')"></i>`).join('');
   const b = p.booking, n = r.nights || Math.max(1, units(b.checkin_date, b.checkin_time, b.checkout_date, b.checkout_time));
   const lines = [
-    ['เจ้าของ', p.owner.name], ['น้องแมว', cats.map(c => c.name).join(', ')],
+    ['เจ้าของ', p.owner.name], ['น้องแมว', (p.names || cats.map(c => c.name)).join(', ')],
     ['มาฝาก', fmtDate(b.checkin_date) + (b.checkin_time ? ' ' + b.checkin_time + ' น.' : '')],
     ['รับกลับ', fmtDate(b.checkout_date) + (b.checkout_time ? ' ' + b.checkout_time + ' น.' : '')],
     ['จำนวน', n + ' วัน (นับ 24 ชม.)'], ['ห้อง', b.room_type || 'ให้โรงแรมแนะนำ']].concat(r.total ? [['ค่าบริการโดยประมาณ', Number(r.total).toLocaleString('th-TH') + ' ฿']] : []).concat([['สถานะ', 'รอโรงแรมยืนยัน']]);
+  if(p.unknown && p.unknown.length) lines.push(['หมายเหตุ', 'ไม่พบชื่อ ' + p.unknown.join(', ') + ' ในข้อมูลเดิม — แอดมินจะติดต่อขอข้อมูลน้องเพิ่ม']);
   $('d-lines').innerHTML = lines.map(l => `<div class="tline"><span class="k">${l[0]}</span><span>${esc(l[1])}</span></div>`).join('');
   const contact = [CFG.line_oa ? 'LINE ' + CFG.line_oa : '', CFG.phone ? 'โทร ' + CFG.phone : ''].filter(Boolean).join(' · ');
   $('d-contact').textContent = 'แคปหน้าจอนี้เก็บไว้ และแอด LINE โรงแรมเพื่อรับการยืนยัน';
+  document.querySelector('.ticket .k').textContent = 'เลขที่การจอง' + (p.names ? ' · ลูกค้าเก่า ⚡' : '');
   window.scrollTo(0, 0);
 }
 
@@ -513,7 +598,20 @@ function applyConfig(c){
 [['o-name','e-o-name'],['o-phone','e-o-phone']].forEach(([id, e]) => $(id).addEventListener('input', () => { $(id).classList.remove('bad'); $(e).classList.remove('on'); }));
 $('c-care').addEventListener('change', () => $('e-care').classList.toggle('on', !$('c-care').checked));
 (function init(){
-  if(!recall()) cats.push(newCat());
+  const had = recall();
+  if(!had && !cats.length) cats.push(newCat());
+  try{
+    const m = JSON.parse(localStorage.getItem(MEM_KEY) || 'null');
+    if(m && m.owner && m.owner.phone) $('q-phone').value = m.owner.phone;
+    if(m && Array.isArray(m.qNames) && m.qNames.length) qNames = m.qNames.slice(0, 6);
+    else if(m && Array.isArray(m.cats) && m.cats.length) qNames = m.cats.map(c => c.name).filter(Boolean).slice(0, 6);
+    if(!qNames.length) qNames = [''];
+  }catch(e){}
+  renderQ();
+  let start = 'new';
+  try{ start = localStorage.getItem(MEM_KEY + '_mode') || 'new'; }catch(e){}
+  if(/[?#&](mode=)?quick/i.test(location.search + location.hash)) start = 'quick';
+  setMode(start);
   renderCats(); renderRooms(); updateSummary();
   call({action:'config'}).then(r => { if(r && r.ok) applyConfig(r); }).catch(() => toast('โหลดการตั้งค่าไม่ได้ ยังกรอกข้อมูลได้ตามปกติ'));
 })();

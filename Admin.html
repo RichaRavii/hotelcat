@@ -350,7 +350,7 @@ function bookingRow(b, extra){
     <div class="avs">${cs.map(c => avatar(c)).join('') || avatar(null)}</div>
     <div class="main" style="margin-left:10px">
       <div class="t">${esc(cs.map(c => c.name).join(', ') || '–')} <span class="muted small">· ${esc(o.name)}</span></div>
-      <div class="s">${esc(b.booking_id)} · ${dShort(b.checkin_date)}${b.checkin_time ? ' ' + esc(b.checkin_time) : ''} → ${dShort(b.checkout_date)}${b.checkout_time ? ' ' + esc(b.checkout_time) : ''} · ${units(b)} วัน${o.phone ? ' · ' + esc(o.phone) : ''}</div>
+      <div class="s">${/ฝากด่วน/.test(b.staff_note || '') ? '<span class="tagc">⚡ ลูกค้าเก่า</span> ' : ''}${esc(b.booking_id)} · ${dShort(b.checkin_date)}${b.checkin_time ? ' ' + esc(b.checkin_time) : ''} → ${dShort(b.checkout_date)}${b.checkout_time ? ' ' + esc(b.checkout_time) : ''} · ${units(b)} วัน${o.phone ? ' · ' + esc(o.phone) : ''}</div>
       ${extra || ''}
     </div>
     <div class="r">${roomPill(b.room)}<div style="margin-top:4px">${stBadge(b.status)}</div></div>
