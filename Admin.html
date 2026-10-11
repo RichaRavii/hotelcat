@@ -1015,8 +1015,8 @@ let roomDraft = null;
 function renderSettings(){
   if(ME.role !== 'admin'){ $('v-settings').innerHTML = '<div class="card empty">เฉพาะแอดมิน</div>'; return; }
   roomDraft = DB.rooms.map(r => Object.assign({}, r));
-  const onGit = /github\.io$/i.test(location.hostname);
-  const regUrl = onGit ? location.href.replace(/[^\/]*$/, '') : (DB.web_url || '');
+  const onGit = /^https?:$/.test(location.protocol) && !/script\.google|googleusercontent/.test(location.hostname);
+  const regUrl = onGit ? location.href.split('?')[0].replace(/[^\/]*$/, '') + 'register.html' : (DB.web_url || '');
   $('v-settings').innerHTML = `
     <div class="grid2">
       <div class="card"><h3>🔗 ลิงก์ลงทะเบียนสำหรับลูกค้า</h3>
