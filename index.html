@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ลงทะเบียนฝากน้องแมว</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Mitr:wght@400;500&family=Noto+Sans+Thai:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#FBF6EF; --panel:#FFFFFF; --ink:#2B2118; --muted:#7A6A5C; --line:#EADFD2;
+    --ginger:#D9692B; --ginger-d:#B5531C; --ginger-soft:#FBE7D8; --sage:#4E7D6A; --sage-soft:#E3EFE8; --rose:#C0453A;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:var(--bg);color:var(--ink);font-family:'Noto Sans Thai',sans-serif;font-size:15px;line-height:1.55}
+  .wrap{max-width:640px;margin:0 auto;padding:0 16px 120px}
+  header{padding:28px 0 18px;text-align:center}
+  .logo{width:58px;height:58px;margin:0 auto 10px;border-radius:18px;background:var(--ginger);display:flex;align-items:center;justify-content:center;box-shadow:0 6px 18px rgba(217,105,43,.28)}
+  .logo svg{width:34px;height:34px;fill:#fff}
+  h1{font-family:'Mitr',sans-serif;font-weight:500;font-size:24px;margin:0}
+  .tag{color:var(--muted);margin-top:2px}
+  .note{background:var(--ginger-soft);border-radius:12px;padding:10px 14px;font-size:13.5px;margin:6px 0 18px;color:#6B3A17}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:18px 16px;margin-bottom:16px}
+  .card h2{font-family:'Mitr',sans-serif;font-weight:500;font-size:18px;margin:0 0 14px;display:flex;align-items:center;gap:10px}
+  .num{width:28px;height:28px;border-radius:50%;background:var(--ink);color:#fff;font-size:14px;display:inline-flex;align-items:center;justify-content:center;font-family:'Noto Sans Thai';font-weight:600;flex:none}
+  label.l{display:block;font-size:13px;font-weight:600;color:var(--muted);margin:12px 0 5px}
+  label.l .req{color:var(--ginger)}
+  input[type=text],input[type=tel],input[type=date],input[type=time],textarea,select{width:100%;font:inherit;color:var(--ink);background:#FFFDFB;border:1.5px solid var(--line);border-radius:12px;padding:11px 12px;min-height:46px;-webkit-appearance:none;appearance:none}
+  textarea{min-height:64px;resize:vertical}
+  input:focus,textarea:focus,select:focus{outline:none;border-color:var(--ginger);box-shadow:0 0 0 3px var(--ginger-soft)}
+  .bad{border-color:var(--rose)!important}
+  .err{color:var(--rose);font-size:12.5px;margin-top:4px;display:none}
+  .err.on{display:block}
+  .row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .row3{display:grid;grid-template-columns:1.3fr 1fr;gap:10px}
+  .chips{display:flex;flex-wrap:wrap;gap:7px}
+  .chip{border:1.5px solid var(--line);background:#fff;border-radius:999px;padding:7px 13px;font:inherit;font-size:14px;color:var(--ink);cursor:pointer;min-height:38px;transition:.12s}
+  .chip.on{background:var(--ginger);border-color:var(--ginger);color:#fff}
+  .cat{border:1.5px dashed var(--line);border-radius:16px;padding:14px;margin-bottom:12px;position:relative;background:#FFFCF8}
+  .cat-head{display:flex;gap:14px;align-items:center}
+  .ph{width:92px;height:92px;border-radius:50%;flex:none;background:var(--ginger-soft) center/cover no-repeat;border:2px solid #fff;box-shadow:0 0 0 1.5px var(--line);display:flex;align-items:center;justify-content:center;flex-direction:column;cursor:pointer;color:var(--ginger-d);font-size:12px;font-weight:600;text-align:center;position:relative}
+  .ph svg{width:26px;height:26px;fill:var(--ginger)}
+  .ph.has span,.ph.has svg{display:none}
+  .ph .edit{display:none;position:absolute;right:-2px;bottom:-2px;width:28px;height:28px;border-radius:50%;background:var(--ink);color:#fff;font-size:13px;align-items:center;justify-content:center}
+  .ph.has .edit{display:flex}
+  .cat-title{font-family:'Mitr',sans-serif;font-size:16px}
+  .cat-sub{font-size:12.5px;color:var(--muted)}
+  .rm{position:absolute;top:10px;right:10px;border:none;background:none;color:var(--muted);font:inherit;font-size:13px;cursor:pointer;padding:6px}
+  details{margin-top:12px;border-top:1px solid var(--line);padding-top:10px}
+  summary{cursor:pointer;font-weight:600;color:var(--sage);font-size:14px;list-style:none}
+  summary::-webkit-details-marker{display:none}
+  summary::before{content:'＋ '}
+  details[open] summary::before{content:'－ '}
+  .add{width:100%;border:1.5px dashed var(--ginger);background:transparent;color:var(--ginger-d);border-radius:14px;padding:12px;font:inherit;font-weight:600;cursor:pointer}
+  .nights{margin-top:12px;background:var(--sage-soft);color:var(--sage);border-radius:12px;padding:10px 14px;font-weight:600;display:none}
+  .rooms{display:grid;gap:8px;margin-top:4px}
+  .room{display:flex;justify-content:space-between;align-items:center;border:1.5px solid var(--line);border-radius:12px;padding:11px 14px;cursor:pointer;background:#fff}
+  .room.on{border-color:var(--ginger);background:var(--ginger-soft)}
+  .room b{font-weight:600}
+  .room small{color:var(--muted)}
+  .consent{display:flex;gap:10px;align-items:flex-start;padding:10px 0;cursor:pointer}
+  .consent input{width:22px;height:22px;accent-color:var(--ginger);flex:none;margin-top:2px}
+  .terms{font-size:13px;color:var(--muted);background:#FFFCF8;border-radius:10px;padding:10px 12px;margin-bottom:6px}
+  .bar{position:fixed;left:0;right:0;bottom:0;background:rgba(251,246,239,.96);backdrop-filter:blur(6px);border-top:1px solid var(--line);padding:12px 16px calc(12px + env(safe-area-inset-bottom))}
+  .bar .in{max-width:640px;margin:0 auto;display:flex;gap:12px;align-items:center}
+  .bar .sum{flex:1;font-size:13px;color:var(--muted);line-height:1.35}
+  .bar .sum b{color:var(--ink);font-size:14px}
+  .btn{border:none;background:var(--ginger);color:#fff;font:inherit;font-weight:600;font-size:16px;padding:13px 22px;border-radius:14px;cursor:pointer;min-height:50px}
+  .btn:disabled{opacity:.55}
+  .btn.ghost{background:#fff;color:var(--ink);border:1.5px solid var(--line)}
+  .hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+  .remember{display:none;background:var(--sage-soft);color:var(--sage);border-radius:12px;padding:10px 14px;font-size:13.5px;margin-bottom:14px;align-items:center;gap:10px}
+  .remember.on{display:flex}
+  .remember button{margin-left:auto;border:none;background:none;color:var(--sage);text-decoration:underline;font:inherit;cursor:pointer}
+  .done{display:none;text-align:center;padding-top:20px}
+  .done .big{font-family:'Mitr',sans-serif;font-size:22px;margin:12px 0 4px}
+  .ticket{background:#fff;border:1px solid var(--line);border-radius:18px;padding:18px;margin:18px 0;text-align:left}
+  .ticket .id{font-family:'Mitr',sans-serif;font-size:26px;color:var(--ginger-d);text-align:center;letter-spacing:1px}
+  .ticket .k{color:var(--muted);font-size:13px}
+  .tline{display:flex;justify-content:space-between;gap:10px;padding:7px 0;border-bottom:1px dashed var(--line)}
+  .tline:last-child{border:none}
+  .thumbs{display:flex;gap:6px;justify-content:center;margin-top:10px}
+  .thumbs i{width:52px;height:52px;border-radius:50%;background:var(--ginger-soft) center/cover;display:block;border:2px solid #fff;box-shadow:0 0 0 1px var(--line)}
+  .loading{position:fixed;inset:0;background:rgba(43,33,24,.45);display:none;align-items:center;justify-content:center;z-index:20}
+  .loading.on{display:flex}
+  .loading div{background:#fff;border-radius:16px;padding:20px 26px;font-weight:600}
+  .toast{position:fixed;left:50%;top:16px;transform:translateX(-50%);background:var(--rose);color:#fff;padding:10px 16px;border-radius:12px;font-size:14px;display:none;z-index:30;max-width:92vw}
+  .toast.on{display:block}
+  @media(max-width:380px){.row,.row3{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="logo"><svg viewBox="0 0 24 24"><path d="M12 13c-2.8 0-6 2.6-6 5.2C6 20 7.4 21 9 21c1.3 0 2-.6 3-.6s1.7.6 3 .6c1.6 0 3-1 3-2.8 0-2.6-3.2-5.2-6-5.2zM5.5 12.5c1.2-.3 1.8-1.9 1.3-3.5S5 6.4 3.8 6.7 2 8.6 2.5 10.2s1.8 2.6 3 2.3zm13 0c1.2.3 2.5-.7 3-2.3s-.1-3.2-1.3-3.5-2.5.8-3 2.4.1 3.1 1.3 3.4zM9 9.5c1.4 0 2.3-1.6 2.1-3.4S9.8 3 8.5 3.2 6.3 5 6.6 6.8 7.6 9.5 9 9.5zm6 0c1.4 0 2.4-1.2 2.6-2.9.3-1.8-.7-3.4-2-3.5s-2.6 1.3-2.8 3.1.8 3.3 2.2 3.3z"/></svg></div>
+    <h1 id="hotel">โรงแรมแมว</h1>
+    <div class="tag" id="tagline">ลงทะเบียนฝากน้องแมว</div>
+  </header>
+
+  <div id="form-view">
+    <div class="note" id="reg-note">กรุณากรอกข้อมูลให้ครบ ทางโรงแรมจะติดต่อยืนยันการจอง</div>
+    <div class="remember" id="remember">✓ เติมข้อมูลจากครั้งก่อนให้แล้ว (เก็บไว้ในเครื่องนี้เท่านั้น) <button type="button" onclick="forgetMe()">ล้างข้อมูล</button></div>
+
+    <section class="card">
+      <h2><span class="num">1</span>ข้อมูลเจ้าของ</h2>
+      <label class="l" for="o-name">ชื่อ-นามสกุล <span class="req">*</span></label>
+      <input type="text" id="o-name" autocomplete="name" maxlength="80" placeholder="เช่น สมใจ ใจดี">
+      <div class="err" id="e-o-name">กรุณากรอกชื่อ</div>
+      <div class="row">
+        <div>
+          <label class="l" for="o-phone">เบอร์โทร <span class="req">*</span></label>
+          <input type="tel" id="o-phone" inputmode="tel" autocomplete="tel" maxlength="15" placeholder="08x-xxx-xxxx">
+          <div class="err" id="e-o-phone">เบอร์โทร 9–10 หลัก</div>
+        </div>
+        <div>
+          <label class="l" for="o-line">LINE ID</label>
+          <input type="text" id="o-line" maxlength="60" placeholder="ไลน์ไอดี" autocapitalize="off">
+        </div>
+      </div>
+      <label class="l" for="o-emer">ผู้ติดต่อสำรอง (กรณีติดต่อไม่ได้)</label>
+      <input type="text" id="o-emer" maxlength="120" placeholder="ชื่อ / เบอร์โทร (ไม่บังคับ)">
+    </section>
+
+    <section class="card">
+      <h2><span class="num">2</span>ข้อมูลน้องแมว</h2>
+      <div id="cats"></div>
+      <button type="button" class="add" id="add-cat" onclick="addCat()">＋ เพิ่มน้องแมวอีกตัว</button>
+    </section>
+
+    <section class="card">
+      <h2><span class="num">3</span>วันเข้าพัก</h2>
+      <div class="row3">
+        <div><label class="l" for="ci-date">วันที่มาฝาก <span class="req">*</span></label><input type="date" id="ci-date"></div>
+        <div><label class="l" for="ci-time">เวลา</label><input type="time" id="ci-time"></div>
+      </div>
+      <div class="row3">
+        <div><label class="l" for="co-date">วันที่มารับกลับ <span class="req">*</span></label><input type="date" id="co-date"></div>
+        <div><label class="l" for="co-time">เวลา</label><input type="time" id="co-time"></div>
+      </div>
+      <div class="err" id="e-date">กรุณาเลือกวันมาฝาก และวันรับกลับ (ไม่ก่อนวันมาฝาก)</div>
+      <div class="nights" id="nights"></div>
+      <div id="room-wrap" style="display:none">
+        <label class="l">ประเภทห้องที่สนใจ</label>
+        <div class="rooms" id="rooms"></div>
+      </div>
+      <label class="l" for="b-note">ฝากบอกโรงแรม</label>
+      <textarea id="b-note" maxlength="1000" placeholder="เช่น นำอาหาร/ทรายมาเอง, ขอห้องติดกัน, เวลาที่สะดวกให้ติดต่อ"></textarea>
+    </section>
+
+    <section class="card">
+      <h2><span class="num">4</span>ความยินยอม</h2>
+      <div class="terms" id="terms"></div>
+      <label class="consent"><input type="checkbox" id="c-care"><span><b>ยินยอมให้โรงแรมดูแลน้องแมว</b> ตามข้อมูลข้างต้น <span style="color:var(--ginger)">*</span></span></label>
+      <div class="err" id="e-care">กรุณาติ๊กยินยอมก่อนส่ง</div>
+      <label class="consent"><input type="checkbox" id="c-photo" checked><span>ยินยอมให้ถ่ายภาพ/วิดีโอน้องระหว่างเข้าพัก เพื่อส่งอัปเดตให้เจ้าของ</span></label>
+    </section>
+    <div class="hp" aria-hidden="true"><input type="text" id="website" tabindex="-1" autocomplete="off"></div>
+  </div>
+
+  <div class="done" id="done-view">
+    <div class="logo"><svg viewBox="0 0 24 24"><path d="M9 16.2 4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4z"/></svg></div>
+    <div class="big">ส่งข้อมูลเรียบร้อย</div>
+    <div class="tag">โรงแรมจะติดต่อยืนยันห้องพักโดยเร็ว</div>
+    <div class="ticket">
+      <div class="k" style="text-align:center">เลขที่การจอง</div>
+      <div class="id" id="d-id"></div>
+      <div class="thumbs" id="d-thumbs"></div>
+      <div id="d-lines" style="margin-top:12px"></div>
+    </div>
+    <div class="tag" id="d-contact" style="margin-bottom:18px"></div>
+    <button class="btn ghost" onclick="location.reload()">ลงทะเบียนอีกครั้ง</button>
+  </div>
+</div>
+
+<div class="bar" id="bar"><div class="in">
+  <div class="sum" id="sum"><b>ยังไม่ได้เลือกวัน</b><br>กรอกข้อมูลให้ครบแล้วกดส่ง</div>
+  <button class="btn" id="submit" onclick="submitForm()">ส่งการจอง</button>
+</div></div>
+<div class="loading" id="loading"><div id="loading-text">กำลังส่งข้อมูล…</div></div>
+<div class="toast" id="toast"></div>
+
+<script>
+// ถ้าวางไฟล์นี้บน GitHub Pages แทนการเปิดจาก Apps Script ให้ใส่ลิงก์ /exec ตรงนี้
+const API_URL = '';
+
+const ERR = {
+  need_owner_name:'กรุณากรอกชื่อเจ้าของ', bad_phone:'เบอร์โทรไม่ถูกต้อง', need_cat:'กรุณาเพิ่มน้องแมวอย่างน้อย 1 ตัว', need_cat_name:'กรุณากรอกชื่อน้องแมวทุกตัว',
+  bad_date:'กรุณาเลือกวันที่', past_date:'วันมาฝากผ่านไปแล้ว', bad_range:'วันรับกลับต้องไม่ก่อนวันมาฝาก', too_long:'ฝากได้สูงสุด 180 คืน กรุณาติดต่อโรงแรม',
+  need_consent:'กรุณาติ๊กยินยอม', busy:'ระบบมีผู้ใช้งานมาก กรุณาลองอีกครั้งใน 1 นาที', server:'ระบบขัดข้อง กรุณาลองใหม่ หรือติดต่อโรงแรม'
+};
+function call(body){
+  return new Promise((resolve, reject) => {
+    if (window.google && google.script && google.script.run) {
+      google.script.run.withSuccessHandler(s => { try{ resolve(JSON.parse(s)); }catch(e){ reject(e); } }).withFailureHandler(reject).api(JSON.stringify(body));
+    } else if (API_URL) {
+      fetch(API_URL, {method:'POST', headers:{'Content-Type':'text/plain;charset=utf-8'}, body:JSON.stringify(body)}).then(r => r.json()).then(resolve, reject);
+    } else reject(new Error('ยังไม่ได้ตั้งค่า API_URL'));
+  });
+}
+const $ = id => document.getElementById(id);
+const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+let CFG = {traits:['ขี้อ้อน','ขี้กลัว','ซน','เงียบ'], breeds:[], room_types:[]};
+let cats = [];
+let roomType = '';
+let catSeq = 0;
+
+function toast(msg){ const t = $('toast'); t.textContent = msg; t.classList.add('on'); clearTimeout(t._h); t._h = setTimeout(() => t.classList.remove('on'), 4200); }
+function fmtDate(ymd){
+  if(!ymd) return '';
+  const d = new Date(ymd + 'T00:00:00');
+  return d.toLocaleDateString('th-TH', {weekday:'short', day:'numeric', month:'short', year:'numeric'});
+}
+function nightsOf(a, b){ if(!a || !b) return -1; return Math.round((Date.parse(b) - Date.parse(a)) / 86400000); }
+
+// ---------- cats
+function newCat(data){ return Object.assign({uid:++catSeq, name:'', sex:'', age:'', breed:'', color:'', neutered:'', vaccine:'', traits:[], food:'', medical:'', meds:'', caution:'', photo:null}, data || {}); }
+function addCat(data){
+  if(cats.length >= 6){ toast('ลงทะเบียนได้ครั้งละไม่เกิน 6 ตัว'); return; }
+  cats.push(newCat(data)); renderCats(); updateSummary();
+  if(!data){ const el = document.querySelector('#cats .cat:last-child input[data-f=name]'); if(el) el.focus(); }
+}
+function removeCat(uid){ cats = cats.filter(c => c.uid !== uid); renderCats(); updateSummary(); }
+function chipGroup(c, field, options, multi){
+  return '<div class="chips">' + options.map(o => {
+    const on = multi ? c[field].indexOf(o) >= 0 : c[field] === o;
+    return '<button type="button" class="chip' + (on?' on':'') + '" data-uid="'+c.uid+'" data-f="'+field+'" data-v="'+esc(o)+'" data-multi="'+(multi?1:0)+'">' + esc(o) + '</button>';
+  }).join('') + '</div>';
+}
+function renderCats(){
+  const box = $('cats');
+  box.innerHTML = cats.map((c, i) => `
+    <div class="cat" data-uid="${c.uid}">
+      ${cats.length > 1 ? `<button type="button" class="rm" onclick="removeCat(${c.uid})">ลบ ✕</button>` : ''}
+      <div class="cat-head">
+        <label class="ph${c.photo ? ' has' : ''}" style="${c.photo ? `background-image:url('${c.photo.data}')` : ''}">
+          <svg viewBox="0 0 24 24"><path d="M9 3 7.2 5H4a2 2 0 0 0-2 2v11a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-3.2L15 3H9zm3 5a5 5 0 1 1 0 10 5 5 0 0 1 0-10zm0 2a3 3 0 1 0 0 6 3 3 0 0 0 0-6z"/></svg>
+          <span>เพิ่มรูป<br>น้องแมว</span><i class="edit">✎</i>
+          <input type="file" accept="image/*" hidden onchange="pickPhoto(${c.uid}, this)">
+        </label>
+        <div style="flex:1;min-width:0">
+          <div class="cat-title">น้องแมวตัวที่ ${i + 1}</div>
+          <div class="cat-sub">แตะวงกลมเพื่อใส่รูป ช่วยให้พนักงานจำน้องได้</div>
+        </div>
+      </div>
+      <label class="l">ชื่อน้องแมว <span class="req">*</span></label>
+      <input type="text" data-uid="${c.uid}" data-f="name" maxlength="60" value="${esc(c.name)}" placeholder="ชื่อเล่นน้อง">
+      <div class="row">
+        <div><label class="l">อายุ</label><input type="text" data-uid="${c.uid}" data-f="age" maxlength="30" value="${esc(c.age)}" placeholder="เช่น 3 ปี / 8 เดือน"></div>
+        <div><label class="l">สายพันธุ์</label><input type="text" data-uid="${c.uid}" data-f="breed" list="breeds" maxlength="60" value="${esc(c.breed)}" placeholder="เลือกหรือพิมพ์"></div>
+      </div>
+      <label class="l">เพศ</label>${chipGroup(c, 'sex', ['ผู้', 'เมีย'], false)}
+      <label class="l">นิสัย (เลือกได้หลายข้อ)</label>${chipGroup(c, 'traits', CFG.traits, true)}
+      <label class="l">อาหารที่ทาน / เวลาให้อาหาร</label>
+      <textarea data-uid="${c.uid}" data-f="food" maxlength="1000" placeholder="ยี่ห้อ ปริมาณ มื้อ เช่น เม็ด 2 มื้อ 8:00 / 17:00 + เปียกวันเว้นวัน">${esc(c.food)}</textarea>
+      <label class="l">โรคประจำตัว</label>
+      <input type="text" data-uid="${c.uid}" data-f="medical" maxlength="1000" value="${esc(c.medical)}" placeholder="ไม่มี / ระบุ">
+      <label class="l">ยาที่ต้องให้</label>
+      <input type="text" data-uid="${c.uid}" data-f="meds" maxlength="1000" value="${esc(c.meds)}" placeholder="ชื่อยา ขนาด เวลา (ถ้ามี)">
+      <label class="l">ข้อควรระวัง</label>
+      <input type="text" data-uid="${c.uid}" data-f="caution" maxlength="1000" value="${esc(c.caution)}" placeholder="เช่น ไม่ชอบให้จับหาง, แพ้ไก่">
+      <details${c.neutered || c.vaccine || c.color ? ' open' : ''}>
+        <summary>ข้อมูลเพิ่มเติม (ทำหมัน / วัคซีน / สี)</summary>
+        <label class="l">ทำหมัน</label>${chipGroup(c, 'neutered', ['ทำแล้ว', 'ยังไม่ทำ'], false)}
+        <div class="row">
+          <div><label class="l">วัคซีน</label><input type="text" data-uid="${c.uid}" data-f="vaccine" maxlength="120" value="${esc(c.vaccine)}" placeholder="ครบ / ล่าสุดเมื่อ…"></div>
+          <div><label class="l">สี / ลักษณะ</label><input type="text" data-uid="${c.uid}" data-f="color" maxlength="60" value="${esc(c.color)}" placeholder="เช่น ส้มขาว"></div>
+        </div>
+      </details>
+      <div class="err" id="e-cat-${c.uid}">กรุณากรอกชื่อน้องแมว</div>
+    </div>`).join('');
+  $('add-cat').style.display = cats.length >= 6 ? 'none' : '';
+}
+document.addEventListener('input', e => {
+  const el = e.target, uid = Number(el.dataset.uid), f = el.dataset.f;
+  if(!uid || !f) return;
+  const c = cats.find(x => x.uid === uid); if(!c) return;
+  c[f] = el.value;
+  if(f === 'name'){ el.classList.remove('bad'); $('e-cat-' + uid).classList.remove('on'); updateSummary(); }
+});
+document.addEventListener('click', e => {
+  const b = e.target.closest('.chip'); if(!b) return;
+  const c = cats.find(x => x.uid === Number(b.dataset.uid)); if(!c) return;
+  const f = b.dataset.f, v = b.dataset.v;
+  if(b.dataset.multi === '1'){
+    const i = c[f].indexOf(v); if(i >= 0) c[f].splice(i, 1); else c[f].push(v);
+    b.classList.toggle('on', i < 0);
+  } else {
+    c[f] = c[f] === v ? '' : v;
+    b.parentNode.querySelectorAll('.chip').forEach(x => x.classList.toggle('on', x === b && c[f] === v));
+  }
+});
+
+// shrink photos in the browser before sending (max 1280 px, JPEG) -> fast on mobile data
+function shrinkImage(file){
+  return new Promise((resolve, reject) => {
+    const url = URL.createObjectURL(file);
+    const img = new Image();
+    img.onload = () => {
+      const max = 1280, s = Math.min(1, max / Math.max(img.width, img.height));
+      const cv = document.createElement('canvas');
+      cv.width = Math.round(img.width * s); cv.height = Math.round(img.height * s);
+      cv.getContext('2d').drawImage(img, 0, 0, cv.width, cv.height);
+      URL.revokeObjectURL(url);
+      resolve({mime:'image/jpeg', data: cv.toDataURL('image/jpeg', 0.82)});
+    };
+    img.onerror = () => { URL.revokeObjectURL(url); reject(new Error('อ่านรูปไม่ได้ ลองเลือกรูปอื่น (JPG/PNG)')); };
+    img.src = url;
+  });
+}
+async function pickPhoto(uid, input){
+  const f = input.files && input.files[0]; if(!f) return;
+  const c = cats.find(x => x.uid === uid); if(!c) return;
+  try{ c.photo = await shrinkImage(f); renderCats(); }
+  catch(err){ toast(err.message); }
+}
+
+// ---------- dates & rooms
+function renderRooms(){
+  const types = CFG.room_types || [];
+  $('room-wrap').style.display = types.length ? '' : 'none';
+  $('rooms').innerHTML = types.map(t => `<div class="room${roomType === t.type ? ' on' : ''}" data-type="${esc(t.type)}">
+      <div><b>${esc(t.type)}</b><br><small>อยู่ได้ ${t.capacity} ตัว/ห้อง</small></div>
+      <div style="text-align:right"><b>${Number(t.price).toLocaleString('th-TH')} ฿</b><br><small>ต่อคืน</small></div></div>`).join('')
+    + (types.length ? `<div class="room${roomType === '' ? ' on' : ''}" data-type=""><div><b>ให้โรงแรมแนะนำ</b><br><small>เลือกห้องที่เหมาะกับน้อง</small></div></div>` : '');
+}
+$('rooms').addEventListener('click', e => {
+  const r = e.target.closest('.room'); if(!r) return;
+  roomType = r.dataset.type; renderRooms(); updateSummary();
+});
+['ci-date', 'co-date'].forEach(id => $(id).addEventListener('change', () => {
+  if(id === 'ci-date' && $('ci-date').value){
+    $('co-date').min = $('ci-date').value;
+    if(!$('co-date').value || $('co-date').value < $('ci-date').value){
+      const d = new Date($('ci-date').value + 'T00:00:00Z'); d.setUTCDate(d.getUTCDate() + 1); $('co-date').value = d.toISOString().slice(0, 10);
+    }
+  }
+  $('e-date').classList.remove('on'); updateSummary();
+}));
+function updateSummary(){
+  const a = $('ci-date').value, b = $('co-date').value, n = nightsOf(a, b);
+  const named = cats.filter(c => c.name.trim()).length || cats.length;
+  const box = $('nights');
+  if(n >= 0){
+    box.style.display = 'block';
+    box.textContent = `🗓 ${fmtDate(a)} → ${fmtDate(b)} · ${Math.max(n, 1)} คืน`;
+  } else box.style.display = 'none';
+  const t = (CFG.room_types || []).find(x => x.type === roomType);
+  const est = t && n >= 0 ? ` · ประมาณ ${(t.price * Math.max(n, 1)).toLocaleString('th-TH')} ฿` : '';
+  $('sum').innerHTML = n >= 0
+    ? `<b>น้องแมว ${named} ตัว · ${Math.max(n, 1)} คืน</b><br>${esc(fmtDate(a))}${est}`
+    : `<b>น้องแมว ${named} ตัว</b><br>เลือกวันมาฝาก–รับกลับ`;
+}
+
+// ---------- remember this device (owner + cats, no photos)
+const MEM_KEY = 'cathotel_register_v1';
+function remember(){
+  try{ localStorage.setItem(MEM_KEY, JSON.stringify({owner:{name:$('o-name').value, phone:$('o-phone').value, line_id:$('o-line').value, emergency:$('o-emer').value},
+    cats: cats.map(c => { const o = Object.assign({}, c); delete o.uid; delete o.photo; return o; })})); }catch(e){}
+}
+function recall(){
+  try{
+    const m = JSON.parse(localStorage.getItem(MEM_KEY) || 'null'); if(!m || !m.owner) return false;
+    $('o-name').value = m.owner.name || ''; $('o-phone').value = m.owner.phone || ''; $('o-line').value = m.owner.line_id || ''; $('o-emer').value = m.owner.emergency || '';
+    (m.cats || []).slice(0, 6).forEach(c => cats.push(newCat(Object.assign({}, c, {traits: Array.isArray(c.traits) ? c.traits : []}))));
+    $('remember').classList.add('on');
+    return cats.length > 0;
+  }catch(e){ return false; }
+}
+function forgetMe(){ try{ localStorage.removeItem(MEM_KEY); }catch(e){} location.reload(); }
+
+// ---------- submit
+function mark(id, bad, errId){ $(id).classList.toggle('bad', bad); if(errId) $(errId).classList.toggle('on', bad); return bad; }
+function validate(){
+  let first = null;
+  const hit = el => { if(!first) first = el; };
+  if(mark('o-name', !$('o-name').value.trim(), 'e-o-name')) hit($('o-name'));
+  const ph = $('o-phone').value.replace(/\D/g, '');
+  if(mark('o-phone', ph.length < 9 || ph.length > 10, 'e-o-phone')) hit($('o-phone'));
+  cats.forEach(c => {
+    const el = document.querySelector(`input[data-uid="${c.uid}"][data-f=name]`);
+    const bad = !c.name.trim(); el.classList.toggle('bad', bad); $('e-cat-' + c.uid).classList.toggle('on', bad);
+    if(bad) hit(el);
+  });
+  const a = $('ci-date').value, b = $('co-date').value;
+  const badDate = !a || !b || b < a;
+  mark('ci-date', !a); mark('co-date', !b || (a && b < a)); $('e-date').classList.toggle('on', badDate);
+  if(badDate) hit($('ci-date'));
+  $('e-care').classList.toggle('on', !$('c-care').checked);
+  if(!$('c-care').checked) hit($('c-care'));
+  if(first){ first.scrollIntoView({behavior:'smooth', block:'center'}); toast('กรุณากรอกช่องที่มีกรอบแดงให้ครบ'); return false; }
+  return true;
+}
+async function submitForm(){
+  if(!validate()) return;
+  const payload = {
+    action:'register', website: $('website').value,
+    owner:{name:$('o-name').value.trim(), phone:$('o-phone').value.trim(), line_id:$('o-line').value.trim(), emergency:$('o-emer').value.trim()},
+    cats: cats.map(c => ({name:c.name, sex:c.sex, age:c.age, breed:c.breed, color:c.color, neutered:c.neutered, vaccine:c.vaccine, traits:c.traits,
+      food:c.food, medical:c.medical, meds:c.meds, caution:c.caution, photo:c.photo})),
+    booking:{checkin_date:$('ci-date').value, checkin_time:$('ci-time').value, checkout_date:$('co-date').value, checkout_time:$('co-time').value,
+      room_type: roomType, note:$('b-note').value, consent_care:$('c-care').checked, consent_photo:$('c-photo').checked}
+  };
+  const withPhotos = cats.some(c => c.photo);
+  $('loading-text').textContent = withPhotos ? 'กำลังส่งข้อมูลและรูปน้อง…' : 'กำลังส่งข้อมูล…';
+  $('loading').classList.add('on'); $('submit').disabled = true;
+  try{
+    const r = await call(payload);
+    if(!r || !r.ok){ toast(ERR[r && r.error] || ('ส่งไม่สำเร็จ: ' + ((r && r.error) || ''))); return; }
+    remember();
+    showDone(r, payload);
+  }catch(err){
+    toast('เชื่อมต่อไม่ได้ กรุณาลองใหม่ (' + (err.message || err) + ')');
+  }finally{
+    $('loading').classList.remove('on'); $('submit').disabled = false;
+  }
+}
+function showDone(r, p){
+  $('toast').classList.remove('on');
+  $('form-view').style.display = 'none'; $('bar').style.display = 'none'; $('done-view').style.display = 'block';
+  $('d-id').textContent = r.booking_id;
+  $('d-thumbs').innerHTML = cats.filter(c => c.photo).map(c => `<i style="background-image:url('${c.photo.data}')"></i>`).join('');
+  const b = p.booking, n = Math.max(1, nightsOf(b.checkin_date, b.checkout_date));
+  const lines = [
+    ['เจ้าของ', p.owner.name], ['น้องแมว', cats.map(c => c.name).join(', ')],
+    ['มาฝาก', fmtDate(b.checkin_date) + (b.checkin_time ? ' ' + b.checkin_time + ' น.' : '')],
+    ['รับกลับ', fmtDate(b.checkout_date) + (b.checkout_time ? ' ' + b.checkout_time + ' น.' : '')],
+    ['จำนวน', n + ' คืน'], ['ห้อง', b.room_type || 'ให้โรงแรมแนะนำ'], ['สถานะ', 'รอโรงแรมยืนยัน']
+  ];
+  $('d-lines').innerHTML = lines.map(l => `<div class="tline"><span class="k">${l[0]}</span><span>${esc(l[1])}</span></div>`).join('');
+  const contact = [CFG.line_oa ? 'LINE ' + CFG.line_oa : '', CFG.phone ? 'โทร ' + CFG.phone : ''].filter(Boolean).join(' · ');
+  $('d-contact').textContent = 'แคปหน้าจอนี้เก็บไว้' + (contact ? ' · ติดต่อโรงแรม ' + contact : '');
+  window.scrollTo(0, 0);
+}
+
+// ---------- start
+function applyConfig(c){
+  CFG = Object.assign(CFG, c);
+  $('hotel').textContent = c.hotel_name || 'โรงแรมแมว';
+  $('tagline').textContent = c.tagline || 'ลงทะเบียนฝากน้องแมว';
+  document.title = 'ลงทะเบียนฝากน้องแมว · ' + (c.hotel_name || '');
+  if(c.register_note) $('reg-note').textContent = c.register_note;
+  $('terms').textContent = c.terms || '';
+  if(c.checkin_time && !$('ci-time').value) $('ci-time').value = c.checkin_time;
+  if(c.checkout_time && !$('co-time').value) $('co-time').value = c.checkout_time;
+  if(c.today) $('ci-date').min = c.today;
+  let dl = document.getElementById('breeds');
+  if(!dl){ dl = document.createElement('datalist'); dl.id = 'breeds'; document.body.appendChild(dl); }
+  dl.innerHTML = (c.breeds || []).map(b => `<option value="${esc(b)}">`).join('');
+  renderRooms(); renderCats(); updateSummary();
+}
+[['o-name','e-o-name'],['o-phone','e-o-phone']].forEach(([id, e]) => $(id).addEventListener('input', () => { $(id).classList.remove('bad'); $(e).classList.remove('on'); }));
+$('c-care').addEventListener('change', () => $('e-care').classList.toggle('on', !$('c-care').checked));
+(function init(){
+  if(!recall()) cats.push(newCat());
+  renderCats(); renderRooms(); updateSummary();
+  call({action:'config'}).then(r => { if(r && r.ok) applyConfig(r); }).catch(() => toast('โหลดการตั้งค่าไม่ได้ ยังกรอกข้อมูลได้ตามปกติ'));
+})();
+</script>
+</body>
+</html>
