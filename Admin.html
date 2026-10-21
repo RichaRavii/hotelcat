@@ -259,7 +259,7 @@ const API_URL = 'https://script.google.com/macros/s/AKfycbzoBY00oiQZVUV9yeIMGjGi
 const TOKEN_KEY = 'cathotel_token_v1';
 
 const ERR = {
-  too_many_cats:'จำนวนน้องแมวเกินที่ห้องนี้รับได้ — เลือกห้องที่ใหญ่กว่า',
+  too_many_cats:'น้องแมวเกินจำนวนที่ห้องรับได้ — แตะเลือกเพิ่มอีกห้อง (เลือกได้หลายห้อง)',
   auth:'เซสชันหมดอายุ กรุณาล็อกอินใหม่', forbidden:'ไม่มีสิทธิ์ทำรายการนี้ (เฉพาะแอดมิน)', invalid_login:'ชื่อหรือ PIN ไม่ถูกต้อง', locked:'ใส่ PIN ผิดหลายครั้ง ล็อก 15 นาที',
   busy:'ระบบไม่ว่าง ลองใหม่อีกครั้ง', not_found:'ไม่พบข้อมูล (อาจถูกลบไปแล้ว ลองรีเฟรช)', need_owner_name:'กรุณากรอกชื่อเจ้าของ', need_owner:'กรุณาเลือกเจ้าของ',
   need_cat:'กรุณาเลือกน้องแมวอย่างน้อย 1 ตัว', need_cat_name:'กรุณากรอกชื่อน้องแมว', bad_date:'วันที่ไม่ถูกต้อง', bad_range:'วันรับกลับต้องไม่ก่อนวันมาฝาก',
@@ -315,7 +315,7 @@ function units(b){
 }
 const ncats = b => String(b.cat_ids || '').split(',').filter(x => x.trim()).length || 1;
 function bill(b){
-  const n = units(b), per = Number(b.price_per_night) || 0, ex = Number(b.extra_cat_price) || 0, more = Math.max(0, ncats(b) - 1);
+  const n = units(b), per = Number(b.price_per_night) || 0, ex = Number(b.extra_cat_price) || 0, more = Math.max(0, ncats(b) - Math.max(1, roomsOf(b.room).length));
   return {n, per, ex, more, room: n * (per + ex * more), total: Math.max(0, n * (per + ex * more) + (Number(b.extra) || 0) - (Number(b.discount) || 0))};
 }
 const TH_DOW = ['อา','จ','อ','พ','พฤ','ศ','ส'];
@@ -331,6 +331,8 @@ const cat = id => DB.cats.find(c => c.cat_id === id);
 const catsOf = mid => DB.cats.filter(c => c.member_id === mid && c.active !== 'N');
 const bkCats = b => String(b.cat_ids || '').split(',').map(s => s.trim()).filter(Boolean).map(cat).filter(Boolean);
 const roomOf = name => DB.rooms.find(r => String(r.room) === String(name));
+// a booking can hold several rooms: "S1,S2"
+const roomsOf = v => String(v || '').split(/[,+\s]+/).map(x => x.trim()).filter(Boolean);
 function upsert(list, key, obj){ const i = list.findIndex(x => x[key] === obj[key]); if(i >= 0) list[i] = obj; else list.push(obj); return obj; }
 function walletOf(mid){
   const tx = DB.wallet.filter(t => t.member_id === mid);
@@ -347,7 +349,7 @@ function avatar(c, cls){
                     : `<span class="av ${cls || ''}" title="${esc(c.name)}">${init}</span>`;
 }
 const stBadge = s => `<span class="st st-${esc(s)}">${esc(s)}</span>`;
-const roomPill = r => r ? `<span class="room-pill">${esc(r)}</span>` : '<span class="room-pill none">ยังไม่จัดห้อง</span>';
+const roomPill = r => roomsOf(r).length ? `<span class="room-pill">${esc(roomsOf(r).join(' + '))}</span>` : '<span class="room-pill none">ยังไม่จัดห้อง</span>';
 function bookingRow(b, extra){
   const cs = bkCats(b), o = owner(b.member_id);
   return `<div class="bk" onclick="openBooking('${esc(b.booking_id)}')">
@@ -420,7 +422,7 @@ function renderToday(){
   const pending = act.filter(b => b.status === 'รอยืนยัน').sort((a, b) => a.checkin_date.localeCompare(b.checkin_date));
   const catsIn = inHouse.reduce((s, b) => s + bkCats(b).length, 0);
   const activeRooms = DB.rooms.filter(r => r.active !== 'N');
-  const usedRooms = new Set(act.filter(b => b.room && b.checkin_date <= t && (b.checkout_date > t || b.status === 'เข้าพัก')).map(b => b.room));
+  const usedRooms = new Set(act.filter(b => b.room && b.checkin_date <= t && (b.checkout_date > t || b.status === 'เข้าพัก')).flatMap(b => roomsOf(b.room)));
   const soon = act.filter(b => b.status === 'ยืนยันแล้ว' && b.checkin_date > t && b.checkin_date <= addDays(t, 7)).sort((a, b) => a.checkin_date.localeCompare(b.checkin_date));
   const list = (arr, empty, extra) => arr.length ? arr.map(b => bookingRow(b, extra && extra(b))).join('') : `<div class="empty">${empty}</div>`;
   const careCards = inHouse.flatMap(b => bkCats(b).map(c => ({b, c})));
@@ -499,7 +501,7 @@ function renderBoard(){
   }).join('');
   let row = 2;
   rooms.forEach(r => {
-    const mine = vis.filter(b => b.room === String(r.room)).sort((a, b) => a.checkin_date.localeCompare(b.checkin_date));
+    const mine = vis.filter(b => roomsOf(b.room).includes(String(r.room))).sort((a, b) => a.checkin_date.localeCompare(b.checkin_date));
     // stack overlapping bookings into lanes (rooms with capacity > 1)
     const lanes = [];
     mine.forEach(b => {
@@ -760,7 +762,7 @@ async function delPhoto(pid){
 function roomFree(roomName, ci, co, exceptId){
   const r = roomOf(roomName); if(!r) return {free: 0, cap: 0};
   const end = co > ci ? co : addDays(ci, 1);
-  const used = DB.bookings.filter(b => b.booking_id !== exceptId && b.room === String(roomName) && ['รอยืนยัน', 'ยืนยันแล้ว', 'เข้าพัก'].includes(b.status) &&
+  const used = DB.bookings.filter(b => b.booking_id !== exceptId && roomsOf(b.room).includes(String(roomName)) && ['รอยืนยัน', 'ยืนยันแล้ว', 'เข้าพัก'].includes(b.status) &&
     b.checkin_date < end && ci < (b.checkout_date > b.checkin_date ? b.checkout_date : addDays(b.checkin_date, 1))).length;
   return {free: used ? 0 : 1, cap: Number(r.capacity) || 1};
 }
@@ -778,7 +780,9 @@ function openBooking(id, preset){
     const cs = f.member_id ? catsOf(f.member_id) : [];
     const chosen = new Set(String(f.cat_ids).split(',').filter(Boolean));
     const bl = bill(f), n = bl.n, total = bl.total;
-    const rooms = DB.rooms.filter(r => r.active !== 'N' || r.room === f.room);
+    const rooms = DB.rooms.filter(r => r.active !== 'N' || roomsOf(f.room).includes(String(r.room)));
+    const picked = roomsOf(f.room).map(roomOf).filter(Boolean);
+    const capAll = picked.reduce((t, r) => t + (Number(r.capacity) || 1), 0);
     const w = o ? walletOf(o.member_id) : null;
     const photos = src ? DB.photos.filter(p => p.booking_id === src.booking_id) : [];
     const actions = !src ? '' : {
@@ -802,13 +806,14 @@ function openBooking(id, preset){
         <div><label class="l">วันที่รับกลับ *</label><div class="row" style="flex-wrap:nowrap"><input type="date" data-f="checkout_date" value="${esc(f.checkout_date)}"><input type="time" data-f="checkout_time" value="${esc(f.checkout_time)}" style="width:110px"></div></div>
       </div>
       <label class="l">ห้องพัก ${f.room_type ? `<span style="font-weight:400">· ลูกค้าเลือก ${esc(f.room_type)}</span>` : ''} — คิด ${n} วัน (24 ชม. จากเวลามาฝาก)</label>
-      <div class="roomsel">${rooms.map(r => { const fr = roomFree(r.room, f.checkin_date, f.checkout_date, f.booking_id); const on = String(f.room) === String(r.room);
-        const small = ncats(f) > fr.cap;
-        return `<button type="button" data-room="${esc(r.room)}" class="${on ? 'on' : ''}${(fr.free <= 0 || small) && !on ? ' full' : ''}">${esc(r.room)} <small>${esc(r.type)} · ${baht(r.price)}฿ · ${fr.free <= 0 ? 'ไม่ว่าง' : small ? 'อยู่ได้ ' + fr.cap + ' ตัว' : 'ว่าง'}</small></button>`; }).join('')}
+      <div class="small muted" style="margin:-2px 0 6px">แตะเลือกได้หลายห้อง (บ้านเดียวกันหลายห้อง) · แตะซ้ำเพื่อเอาออก</div>
+      <div class="roomsel">${rooms.map(r => { const fr = roomFree(r.room, f.checkin_date, f.checkout_date, f.booking_id); const on = roomsOf(f.room).includes(String(r.room));
+        return `<button type="button" data-room="${esc(r.room)}" class="${on ? 'on' : ''}${fr.free <= 0 && !on ? ' full' : ''}">${on ? '✓ ' : ''}${esc(r.room)} <small>${esc(r.type)} · ${baht(r.price)}฿ · ${fr.free <= 0 ? 'ไม่ว่าง' : 'อยู่ได้ ' + fr.cap + ' ตัว'}</small></button>`; }).join('')}
         <button type="button" data-room="" class="${f.room ? '' : 'on'}">ยังไม่จัด<small>เลือกทีหลัง</small></button></div>
+      ${picked.length ? `<div class="small" style="margin-top:6px;color:${ncats(f) > capAll ? 'var(--rose)' : 'var(--sage)'}">เลือก ${picked.length} ห้อง (${esc(picked.map(r => r.room).join(' + '))}) · อยู่ได้รวม ${capAll} ตัว · น้องมา ${ncats(f)} ตัว${ncats(f) > capAll ? ' — เลือกเพิ่มอีกห้อง' : ' ✓'}</div>` : ''}
       <div class="form">
-        <div><label class="l">ราคา/วัน ตัวแรก (฿)</label><input type="number" min="0" data-f="price_per_night" value="${esc(f.price_per_night)}"></div>
-        <div><label class="l">ตัวที่ 2 ขึ้นไป (฿/ตัว/วัน)</label><input type="number" min="0" data-f="extra_cat_price" value="${esc(f.extra_cat_price)}"></div>
+        <div><label class="l">ราคาห้อง/วัน ${picked.length > 1 ? '(รวม ' + picked.length + ' ห้อง)' : ''} (฿)</label><input type="number" min="0" data-f="price_per_night" value="${esc(f.price_per_night)}"></div>
+        <div><label class="l">น้องเพิ่ม (เกิน 1 ตัว/ห้อง) ฿/ตัว/วัน</label><input type="number" min="0" data-f="extra_cat_price" value="${esc(f.extra_cat_price)}"></div>
         <div><label class="l">ค่าบริการเพิ่ม (฿)</label><input type="number" min="0" data-f="extra" value="${esc(f.extra)}" placeholder="อาบน้ำ, อาหารพิเศษ"></div>
         <div><label class="l">ส่วนลด (฿)</label><input type="number" min="0" data-f="discount" value="${esc(f.discount)}"></div>
         <div><label class="l">การชำระเงิน</label><select data-f="paid">${[['', 'ยังไม่ชำระ'], ['มัดจำ', 'มัดจำแล้ว'], ['Y', 'ชำระครบแล้ว']].map(p => `<option value="${p[0]}"${f.paid === p[0] ? ' selected' : ''}>${p[1]}</option>`).join('')}</select></div>
@@ -842,9 +847,17 @@ function openBooking(id, preset){
       f.cat_ids = Array.from(s).join(','); dirty = true; repaint();
     }));
     el.querySelectorAll('[data-room]').forEach(b => b.addEventListener('click', () => {
-      f.room = b.dataset.room; dirty = true;
-      const r = roomOf(f.room);
-      if(r && (!src || !Number(f.price_per_night) || r.type !== f.room_type)) { f.price_per_night = r.price; f.extra_cat_price = r.extra_cat || 0; f.room_type = r.type; }
+      const id = b.dataset.room, list = roomsOf(f.room);
+      if(!id) f.room = '';
+      else f.room = (list.includes(id) ? list.filter(x => x !== id) : list.concat(id)).join(',');
+      dirty = true;
+      const sel = roomsOf(f.room).map(roomOf).filter(Boolean);
+      if(sel.length){
+        // price = all chosen rooms together; staff can still type a different price afterwards
+        f.price_per_night = sel.reduce((t, r) => t + (Number(r.price) || 0), 0);
+        f.extra_cat_price = Number(sel[0].extra_cat) || 0;
+        f.room_type = sel.map(r => r.type).filter((t, i, a) => a.indexOf(t) === i).join(' + ');
+      }
       repaint();
     }));
     const oq = el.querySelector('#bf-oq');
@@ -911,7 +924,7 @@ function openCheckout(id){
   const m = openModal('checkout', () => {
     const b = Object.assign({}, b0, {checkout_date: co.date, checkout_time: co.time});
     const bl = bill(b), n = bl.n, total = bl.total, planned = bill(b0);
-    return head('🏡 เช็คเอาท์ ' + esc(bkCats(b).map(c => c.name).join(', ')), esc(owner(b.member_id).name) + ' · ห้อง ' + esc(b.room || '–')) + `<div class="mb">
+    return head('🏡 เช็คเอาท์ ' + esc(bkCats(b).map(c => c.name).join(', ')), esc(owner(b.member_id).name) + ' · ห้อง ' + esc(roomsOf(b.room).join(' + ') || '–')) + `<div class="mb">
     <div class="form">
       <div><label class="l">วันที่รับกลับจริง</label><input type="date" id="co-d" value="${esc(co.date)}" min="${esc(b0.checkin_date)}"></div>
       <div><label class="l">เวลารับกลับจริง</label><input type="time" id="co-t" value="${esc(co.time)}"></div>
