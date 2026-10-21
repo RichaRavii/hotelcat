@@ -177,6 +177,64 @@
   .sp{flex:1}
   .qr{display:inline-block;padding:10px;background:#fff;border:1px solid var(--line);border-radius:12px}
   a{color:var(--ginger-d);text-decoration:none;font-weight:600}a:hover{text-decoration:underline}
+
+  /* ---------- cute hotel map ---------- */
+  #v-map .mapbox{background:#FFF6EC url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='90' height='90' viewBox='0 0 90 90'%3E%3Cg fill='%23F6E2CF'%3E%3Cellipse cx='22' cy='28' rx='7' ry='6'/%3E%3Ccircle cx='14' cy='19' r='3'/%3E%3Ccircle cx='20' cy='15' r='3'/%3E%3Ccircle cx='27' cy='16' r='3'/%3E%3Ccircle cx='31' cy='22' r='3'/%3E%3Cellipse cx='66' cy='72' rx='7' ry='6'/%3E%3Ccircle cx='58' cy='63' r='3'/%3E%3Ccircle cx='64' cy='59' r='3'/%3E%3Ccircle cx='71' cy='60' r='3'/%3E%3Ccircle cx='75' cy='66' r='3'/%3E%3C/g%3E%3C/svg%3E");border-radius:30px;padding:22px 20px 26px;border:2px solid #F3DFCB}
+  .map-top{display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end;margin-bottom:6px}
+  .map-top h2{font-family:'Mitr',sans-serif;font-weight:500;font-size:26px;margin:0;color:var(--ginger-d);display:flex;align-items:center;gap:10px}
+  .map-top .sub{font-size:13px;color:var(--muted)}
+  .map-top .sp{flex:1}
+  .mstats{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin:14px 0 6px}
+  .mstat{background:#fff;border-radius:20px;padding:10px 14px;border:2px solid #F3DFCB;position:relative}
+  .mstat .k{font-size:12.5px;color:var(--muted);font-weight:600}
+  .mstat .v{font-family:'Mitr',sans-serif;font-size:26px;line-height:1.2;color:var(--ink)}
+  .mstat .v small{font-size:14px;color:var(--muted)}
+  .mlegend{display:flex;flex-wrap:wrap;gap:14px;font-size:12.5px;color:var(--muted);margin:8px 2px 2px}
+  .mgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:30px 18px;margin-top:34px;align-items:start}
+  .house{position:relative;background:#fff;border-radius:6px 6px 26px 26px;box-shadow:0 7px 0 var(--hd,#F2C5B8);border:2px solid var(--hd,#F2C5B8);cursor:default}
+  .house .roof{position:absolute;left:-14px;right:-14px;top:-30px;height:36px;pointer-events:none}
+  .house .roof svg{width:100%;height:100%;display:block;overflow:visible}
+  .house .hd{display:flex;align-items:center;gap:8px;padding:12px 14px 10px;background:var(--hc,#FFE3DA);border-radius:4px 4px 0 0}
+  .house .hd b{font-family:'Mitr',sans-serif;font-weight:500;font-size:20px;color:var(--ink)}
+  .house .hd .tp{font-size:12px;color:var(--muted);line-height:1.2}
+  .house .hd .sp{flex:1}
+  .house .st{font-size:11.5px;font-weight:700;border-radius:999px;padding:3px 10px;background:#fff;color:var(--muted);white-space:nowrap}
+  .house .st.in{background:#E1F5E8;color:#2F7D52}
+  .house .st.arr{background:#FFF1CC;color:#9A6B00}
+  .house .st.out{background:#FDE3DF;color:#B23A31}
+  .house .floor{min-height:150px;padding:30px 10px 10px;display:flex;flex-wrap:wrap;gap:30px 6px;justify-content:center;align-items:flex-end;background:repeating-conic-gradient(var(--fl1,#FFF8F2) 0 25%, var(--fl2,#FFEFE6) 0 50%) 0 0/28px 28px;border-top:2px dashed var(--hd,#F2C5B8)}
+  .house .empty{display:flex;flex-direction:column;align-items:center;gap:2px;color:#B9A79A;font-size:13px;padding-bottom:8px}
+  .house .empty svg{width:76px;height:50px}
+  .house .info{padding:9px 14px 2px;font-size:12.5px;color:var(--muted);line-height:1.5}
+  .house .info b{color:var(--ink);font-weight:600}
+  .house .money{display:flex;align-items:center;justify-content:space-between;margin:8px 12px 12px;background:#FFF8EE;border-radius:16px;padding:8px 12px;border:1.5px solid #F6E2CF}
+  .house .money .k{font-size:11.5px;color:var(--muted)}
+  .house .money .v{font-family:'Mitr',sans-serif;font-size:21px;color:var(--ginger-d)}
+  .house .money .v small{font-size:12px;color:var(--muted)}
+  .house .money .now{text-align:right}
+  .house .money .now .v{font-size:16px;color:var(--ink)}
+  .kitty{width:84px;display:flex;flex-direction:column;align-items:center;cursor:pointer;position:relative}
+  .kitty .face{position:relative;width:62px;height:62px;z-index:1}
+  .kitty .face::before,.kitty .face::after{content:'';position:absolute;top:-9px;width:24px;height:24px;background:var(--ear,#F2A08F);border-radius:4px 60% 4px 60%;z-index:-1;border:3px solid #fff}
+  .kitty .face::before{left:2px;transform:rotate(-8deg)}
+  .kitty .face::after{right:2px;transform:rotate(98deg)}
+  .kitty .face i{position:absolute;inset:0;border-radius:50%;background:#FBE7D8 center/cover no-repeat;border:3px solid #fff;box-shadow:0 2px 6px rgba(120,60,30,.18)}
+  .kitty .face svg{position:absolute;inset:3px;border-radius:50%}
+  .kitty .bed{width:80px;height:18px;border-radius:50%;background:var(--bed,#F7B9A9);margin-top:-9px;box-shadow:inset 0 -4px 0 rgba(0,0,0,.07)}
+  .kitty .nm{margin-top:3px;font-size:12px;font-weight:700;background:#fff;border-radius:999px;padding:1px 9px;border:1.5px solid var(--hd,#F2C5B8);max-width:84px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .kitty .bub{position:absolute;top:-24px;left:50%;transform:translateX(-50%);background:#fff;border:1.5px solid #E9D6C4;border-radius:12px;padding:0 8px;font-size:11px;font-weight:700;white-space:nowrap;z-index:2}
+  .kitty .bub::after{content:'';position:absolute;left:50%;bottom:-5px;width:8px;height:8px;background:#fff;border-right:1.5px solid #E9D6C4;border-bottom:1.5px solid #E9D6C4;transform:translateX(-50%) rotate(45deg)}
+  .kitty .bub.out{color:#B23A31}.kitty .bub.arr{color:#9A6B00}.kitty .bub.med{color:#7A4E9A}
+  .kitty.ghost{opacity:.55}
+  .kitty:hover .face i{transform:scale(1.05)}
+  .mside{background:#fff;border-radius:22px;border:2px solid #F3DFCB;padding:14px 16px}
+  .mside h3{font-family:'Mitr',sans-serif;font-weight:500;font-size:17px;margin:0 0 8px;color:var(--ginger-d)}
+  .mside .ev{display:flex;gap:10px;align-items:center;padding:6px 0;border-bottom:1px dashed #F0E0D2;font-size:13px}
+  .mside .ev:last-child{border-bottom:none}
+  .mside .ev .t{font-family:'Mitr',sans-serif;color:var(--muted);width:44px;flex:none}
+  .mrow{display:grid;grid-template-columns:1fr 290px;gap:18px;align-items:start}
+  @media(max-width:900px){.mrow{grid-template-columns:1fr}}
+  .mapfs{position:fixed;inset:0;z-index:60;overflow:auto;background:#FFF6EC;padding:16px}
   .hint{background:var(--sky-soft);color:#1E4E7A;border-radius:10px;padding:9px 12px;font-size:13px;margin-bottom:12px}
 </style>
 </head>
@@ -208,6 +266,7 @@
   </header>
   <nav class="tabs" id="tabs">
     <button data-v="today" class="on">🏠 วันนี้</button>
+    <button data-v="map">🐾 แผนผังโรงแรม</button>
     <button data-v="bookings">📋 การจอง <span class="badge" id="pending-badge" style="display:none"></span></button>
     <button data-v="board">🗓 ผังห้องพัก</button>
     <button data-v="owners">🐱 ลูกค้า &amp; น้องแมว</button>
@@ -216,6 +275,7 @@
   </nav>
 
   <section class="view on" id="v-today"></section>
+  <section class="view" id="v-map"></section>
   <section class="view" id="v-bookings">
     <div class="toolbar">
       <input class="grow" id="bk-q" placeholder="ค้นหา ชื่อเจ้าของ / น้องแมว / เบอร์ / เลขจอง / ห้อง">
@@ -401,7 +461,7 @@ function renderAll(){
   const pend = DB.bookings.filter(b => b.status === 'รอยืนยัน').length;
   $('pending-badge').style.display = pend ? '' : 'none'; $('pending-badge').textContent = pend;
   const v = document.querySelector('nav.tabs button.on').dataset.v;
-  ({today:renderToday, bookings:renderBookings, board:renderBoard, owners:renderOwners, money:renderMoney, settings:renderSettings})[v]();
+  ({today:renderToday, map:renderMap, bookings:renderBookings, board:renderBoard, owners:renderOwners, money:renderMoney, settings:renderSettings})[v]();
 }
 $('tabs').addEventListener('click', e => {
   const b = e.target.closest('button'); if(!b) return;
@@ -1075,6 +1135,118 @@ async function saveSettings(){
   if(!r.ok) return;
   DB.settings = r.settings; $('hotel-name').textContent = DB.settings.hotel_name; toast('บันทึกการตั้งค่าแล้ว');
 }
+
+
+// ---------- CUTE HOTEL MAP ----------
+const ROOM_COLORS = [
+  {hc:'#FFE3DA', hd:'#F2B4A3', ear:'#F28E7B', bed:'#F7B9A9', fl1:'#FFF8F4', fl2:'#FFEFE8', roof:'#D9604E'},
+  {hc:'#FFF0C2', hd:'#EBCB78', ear:'#E9B33F', bed:'#F6D98A', fl1:'#FFFCF0', fl2:'#FFF5D9', roof:'#C9952A'},
+  {hc:'#FBDDEB', hd:'#E9A9C6', ear:'#DE7BA8', bed:'#F2B5D0', fl1:'#FFF7FB', fl2:'#FDEBF3', roof:'#B9497D'},
+  {hc:'#DDEEFF', hd:'#A9CBEB', ear:'#7FAEDC', bed:'#B9D5F0', fl1:'#F7FBFF', fl2:'#EAF3FD', roof:'#4C7FB5'},
+  {hc:'#DDF3E4', hd:'#A8D8B6', ear:'#79BF8F', bed:'#B5E0C1', fl1:'#F7FDF9', fl2:'#E8F7EC', roof:'#3F8A5A'}
+];
+const FUR = ['#F4A261','#E9C46A','#B08968','#8D99AE','#555B6E','#F2CC8F','#D4A373','#E5989B'];
+function hashN(s){ let h = 0; for(const ch of String(s)) h = (h * 31 + ch.charCodeAt(0)) >>> 0; return h; }
+function catFaceSvg(name){
+  const c = FUR[hashN(name) % FUR.length];
+  return `<svg viewBox="0 0 56 56"><rect width="56" height="56" fill="${c}"/><ellipse cx="28" cy="38" rx="14" ry="10" fill="#fff" opacity=".85"/>
+    <circle cx="20" cy="26" r="3.6" fill="#2A1A1C"/><circle cx="36" cy="26" r="3.6" fill="#2A1A1C"/><circle cx="21" cy="25" r="1.1" fill="#fff"/><circle cx="37" cy="25" r="1.1" fill="#fff"/>
+    <path d="M25.5 33h5l-2.5 3z" fill="#E5989B"/><path d="M28 36c-1.5 2.5-4.5 2.5-6 1M28 36c1.5 2.5 4.5 2.5 6 1" stroke="#2A1A1C" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+    <path d="M10 33l8 1M10 37l8-1M46 33l-8 1M46 37l-8-1" stroke="#2A1A1C" stroke-width="1" opacity=".5"/></svg>`;
+}
+function kitty(c, bub, bubCls, ghost){
+  const face = c.photo_id ? `<i style="background-image:url('${photoUrl(c.photo_id, 160)}')"></i>` : `<i></i>${catFaceSvg(c.name)}`;
+  return `<div class="kitty${ghost ? ' ghost' : ''}" onclick="openCat('${esc(c.cat_id)}')" title="${esc(c.name)}">
+    ${bub ? `<span class="bub ${bubCls || ''}">${esc(bub)}</span>` : ''}
+    <div class="face">${face}</div><div class="bed"></div><div class="nm">${esc(c.name)}</div></div>`;
+}
+const ROOF = (col) => `<svg viewBox="0 0 300 36" preserveAspectRatio="none"><path d="M4 34 L150 4 L296 34" fill="none" stroke="${col}" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke"/><path d="M226 19 V6 H244 V23" fill="none" stroke="${col}" stroke-width="4" stroke-linejoin="round" vector-effect="non-scaling-stroke"/></svg>`;
+const EMPTY_BED = `<svg viewBox="0 0 76 50"><ellipse cx="38" cy="38" rx="34" ry="10" fill="#F3E2D3"/><ellipse cx="38" cy="34" rx="28" ry="8" fill="#FBF0E6"/><text x="52" y="16" font-family="Mitr" font-size="12" fill="#C9B3A2">z</text><text x="60" y="8" font-family="Mitr" font-size="9" fill="#D8C5B6">z</text></svg>`;
+// money each room earned: bookings checked out in the month, split between rooms by room price
+function roomMoney(monthKey){
+  const out = {};
+  DB.bookings.filter(b => b.status === 'เช็คเอาท์แล้ว' && (b.checkout_date || '').slice(0, 7) === monthKey && roomsOf(b.room).length).forEach(b => {
+    const rs = roomsOf(b.room), prices = rs.map(r => Number((roomOf(r) || {}).price) || 1), sum = prices.reduce((a, x) => a + x, 0);
+    rs.forEach((r, i) => { const o = out[r] = out[r] || {amt: 0, n: 0, days: 0}; o.amt += (Number(b.total) || 0) * prices[i] / sum; o.n++; o.days += units(b); });
+  });
+  return out;
+}
+let mapMonth = '';
+function renderMap(){
+  const t = DB.today; if(!mapMonth) mapMonth = t.slice(0, 7);
+  const rooms = DB.rooms.filter(r => r.active !== 'N');
+  const occ = {};   // room -> [{b, cats, state}]
+  DB.bookings.filter(b => roomsOf(b.room).length && (b.status === 'เข้าพัก' || (['ยืนยันแล้ว', 'รอยืนยัน'].includes(b.status) && b.checkin_date === t))).forEach(b => {
+    const rs = roomsOf(b.room), cs = bkCats(b).slice();
+    rs.forEach((r, i) => { const take = Math.ceil(cs.length / (rs.length - i)); (occ[r] = occ[r] || []).push({b, cats: cs.splice(0, take), state: b.status === 'เข้าพัก' ? (b.checkout_date <= t ? 'out' : 'in') : 'arr'}); });
+  });
+  const money = roomMoney(mapMonth);
+  const monthTotal = Object.values(money).reduce((a, o) => a + o.amt, 0);
+  const inCats = DB.bookings.filter(b => b.status === 'เข้าพัก').reduce((a, b) => a + bkCats(b).length, 0);
+  const busy = rooms.filter(r => (occ[r.room] || []).some(x => x.state !== 'arr')).length;
+  const arrToday = DB.bookings.filter(b => b.checkin_date === t && ['ยืนยันแล้ว', 'รอยืนยัน'].includes(b.status));
+  const outToday = DB.bookings.filter(b => b.status === 'เข้าพัก' && b.checkout_date <= t);
+  const types = Array.from(new Set(DB.rooms.map(r => r.type)));
+  const col = r => ROOM_COLORS[Math.max(0, types.indexOf(r.type)) % ROOM_COLORS.length];
+  const months = Array.from(new Set(DB.bookings.filter(b => b.status === 'เช็คเอาท์แล้ว').map(b => (b.checkout_date || '').slice(0, 7)).concat([t.slice(0, 7)]).filter(Boolean))).sort().reverse();
+  const mLabel = m => { const [y, mo] = m.split('-').map(Number); return TH_MON[mo - 1] + ' ' + (y + 543); };
+  const houses = rooms.map(r => {
+    const c = col(r), list = occ[r.room] || [], m = money[r.room];
+    const live = list.filter(x => x.state !== 'arr'), main = live[0] || list[0];
+    const st = live.some(x => x.state === 'out') ? ['out', 'กลับวันนี้'] : live.length ? ['in', 'มีน้องพักอยู่'] : list.length ? ['arr', 'น้องมาวันนี้'] : ['', 'ว่าง'];
+    const cats = list.flatMap(x => x.cats.map(k => {
+      const bub = x.state === 'out' ? 'กลับวันนี้' : x.state === 'arr' ? 'มาวันนี้' : (k.meds && !/^ไม่มี/.test(k.meds)) ? '💊 มียา' : '';
+      return kitty(k, bub, x.state === 'out' ? 'out' : x.state === 'arr' ? 'arr' : 'med', x.state === 'arr');
+    })).join('');
+    const now = live[0] ? bill(live[0].b) : null;
+    const nowShare = now && roomsOf(live[0].b.room).length > 1 ? now.total * (Number(r.price) || 1) / roomsOf(live[0].b.room).reduce((a, x) => a + (Number((roomOf(x) || {}).price) || 1), 0) : (now ? now.total : 0);
+    const left = main ? nights(t, main.b.checkout_date) : 0;
+    return `<div class="house" style="--hc:${c.hc};--hd:${c.hd};--ear:${c.ear};--bed:${c.bed};--fl1:${c.fl1};--fl2:${c.fl2}">
+      <div class="roof">${ROOF(c.roof)}</div>
+      <div class="hd"><div><b>${esc(r.room)}</b><div class="tp">${esc(r.type)} · 1–${esc(r.capacity)} ตัว</div></div><span class="sp"></span><span class="st ${st[0]}">${st[1]}</span></div>
+      <div class="floor">${cats || `<div class="empty">${EMPTY_BED}<span>ห้องว่าง รอน้องอยู่น้า</span></div>`}</div>
+      ${main ? `<div class="info" style="cursor:pointer" onclick="openBooking('${esc(main.b.booking_id)}')">👤 <b>${esc(owner(main.b.member_id).name)}</b> · ${esc(main.b.booking_id)}<br>
+        🗓 ${dShort(main.b.checkin_date)} → ${dShort(main.b.checkout_date)}${main.state === 'in' ? ` · <b>อีก ${left} วัน</b>` : ''}${roomsOf(main.b.room).length > 1 ? `<br>🏠 จองคู่กับห้อง ${esc(roomsOf(main.b.room).filter(x => x !== String(r.room)).join(', '))}` : ''}</div>` : ''}
+      <div class="money"><div><div class="k">รายได้ ${esc(mLabel(mapMonth))}</div><div class="v">${baht(m ? m.amt : 0)} <small>฿</small></div><div class="k">${m ? m.n + ' การจอง · ' + m.days + ' วัน' : 'ยังไม่มีรายได้'}</div></div>
+        ${now ? `<div class="now"><div class="k">ยอดรอบนี้</div><div class="v">${baht(nowShare)} ฿</div><div class="k">${live[0].b.paid === 'Y' ? 'ชำระแล้ว' : 'ยังไม่ชำระ'}</div></div>` : ''}</div>
+    </div>`;
+  }).join('');
+  const evs = [].concat(
+    DB.bookings.filter(b => (b.checked_in_at || '').slice(0, 10) === t).map(b => ({tm: b.checked_in_at.slice(11, 16), txt: `🛬 ${bkCats(b).map(c => c.name).join(', ')} เข้าพัก ${roomsOf(b.room).join('+') || ''}`})),
+    DB.bookings.filter(b => (b.checked_out_at || '').slice(0, 10) === t).map(b => ({tm: b.checked_out_at.slice(11, 16), txt: `🏡 ${bkCats(b).map(c => c.name).join(', ')} กลับบ้าน`})),
+    arrToday.map(b => ({tm: b.checkin_time || '—', txt: `⏳ รอ ${bkCats(b).map(c => c.name).join(', ')} มาถึง`})),
+    outToday.map(b => ({tm: b.checkout_time || '—', txt: `🧺 ${bkCats(b).map(c => c.name).join(', ')} ครบกำหนดกลับ`}))
+  ).sort((a, b) => String(a.tm).localeCompare(String(b.tm)));
+  const ranking = rooms.map(r => ({r, a: (money[r.room] || {}).amt || 0})).sort((a, b) => b.a - a.a).filter(x => x.a > 0).slice(0, 5);
+  $('v-map').innerHTML = `<div class="mapbox" id="mapbox">
+    <div class="map-top"><div><h2>🐾 แผนผังโรงแรมแมว</h2><div class="sub">อัปเดตอัตโนมัติทุก 1 นาที · แตะน้องเพื่อดูข้อมูล · แตะชื่อเจ้าของเพื่อเปิดการจอง</div></div><span class="sp"></span>
+      <select id="map-month" style="width:auto">${months.map(m => `<option value="${m}"${m === mapMonth ? ' selected' : ''}>รายได้ ${mLabel(m)}</option>`).join('')}</select>
+      <button class="btn sec sm" onclick="toggleMapFull()">⛶ เต็มจอ</button></div>
+    <div class="mstats">
+      <div class="mstat"><div class="k">🐱 น้องในโรงแรม</div><div class="v">${inCats} <small>ตัว</small></div></div>
+      <div class="mstat"><div class="k">🏠 ห้องที่มีน้อง</div><div class="v">${busy} <small>/ ${rooms.length} ห้อง</small></div></div>
+      <div class="mstat"><div class="k">🛬 มาวันนี้</div><div class="v">${arrToday.length} <small>การจอง</small></div></div>
+      <div class="mstat"><div class="k">🏡 กลับวันนี้</div><div class="v">${outToday.length} <small>การจอง</small></div></div>
+      <div class="mstat"><div class="k">💰 รายได้ ${esc(mLabel(mapMonth))}</div><div class="v" style="color:var(--ginger-d)">${baht(monthTotal)} <small>฿</small></div></div>
+    </div>
+    <div class="mlegend"><span>🟢 มีน้องพักอยู่</span><span>🟡 น้องจะมาวันนี้ (ตัวจาง)</span><span>🔴 ครบกำหนดกลับวันนี้</span><span>💊 น้องมียาต้องให้</span><span>💰 รายได้ = การจองที่เช็คเอาท์ในเดือนนั้น (จองหลายห้อง แบ่งตามราคาห้อง)</span></div>
+    <div class="mrow">
+      <div class="mgrid">${houses || '<div class="empty">ยังไม่มีห้องพัก — เพิ่มได้ที่ ⚙️ ตั้งค่า</div>'}</div>
+      <div style="display:grid;gap:14px;margin-top:34px">
+        <div class="mside"><h3>📺 วันนี้ที่โรงแรม</h3>${evs.length ? evs.map(e => `<div class="ev"><span class="t">${esc(e.tm)}</span><span>${esc(e.txt)}</span></div>`).join('') : '<div class="muted small">วันนี้ยังเงียบๆ อยู่ 😺</div>'}</div>
+        <div class="mside"><h3>🏆 ห้องทำเงิน ${esc(mLabel(mapMonth))}</h3>${ranking.length ? ranking.map((x, i) => `<div class="ev"><span class="t">${['🥇', '🥈', '🥉', '4', '5'][i]}</span><span style="flex:1"><b>${esc(x.r.room)}</b> <span class="muted small">${esc(x.r.type)}</span></span><b>${baht(x.a)} ฿</b></div>`).join('') : '<div class="muted small">ยังไม่มีการเช็คเอาท์ในเดือนนี้</div>'}</div>
+      </div>
+    </div>
+  </div>`;
+  if(mapFull) $('mapbox').classList.add('mapfs');
+  $('map-month').addEventListener('change', e => { mapMonth = e.target.value; renderMap(); });
+}
+let mapFull = false;
+function toggleMapFull(){ mapFull = !mapFull; const b = $('mapbox'); if(b) b.classList.toggle('mapfs', mapFull); }
+setInterval(() => {
+  const on = document.querySelector('nav.tabs button.on');
+  if(DB && on && on.dataset.v === 'map' && !MODALS.length && !document.hidden) reload();
+}, 60000);
 
 // ---------- start
 if(TOKEN) reload(); else doLogout();
